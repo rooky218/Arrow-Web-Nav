@@ -1,0 +1,52 @@
+body {
+    background-color: lightgray;
+    margin: 0px;
+    border: solid red 3px;
+    padding: 0px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+h1 {
+  margin: 0px;
+  text-align: center;
+}
+
+h3 {
+  margin: 0px;
+  text-align: center;
+}
+
+#center-window,
+#right-window,
+#top-window,
+#bottom-window,
+#left-window {
+  margin: 0;
+  padding: 25px;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+#left-window {
+  background-color: lightgreen;
+}
+
+#center-window {
+  background-color: lightblue;
+}
+
+#right-window {
+  background-color: lightpink;
+}
+
+#top-window {
+  background-color: red;
+}
+
+#bottom-window {
+  background-color: blue;
+}
