@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Arrow Key Navigation</title>
+    <!-- <script src="script.js" async></script> -->
+    <!-- <link rel="stylesheet" href="style.css"> -->
+</head>
+
+<body style="width: 2000px; height: 3500px; background-color: red;">
+
+    <h1>Left Window</h1>
+    <p>This is the left most window</p>
+
+    <h2 style="float: right">Hello Ben</h2>
+
+    <h1 style="margin-top: 1200px;">1200px down</h1>
+
+
+</body>
+
+<script>
+
+function smoothScroll(xAxis, yAxis){
+    var scrollToX = 0;
+    var scrollToY = 0;
+    var myInterval = setInterval(function(){smoothScrollMath(xAxis, yAxis);}, 10);
+
+    function smoothScrollMath(xin, yin){
+        //console.log("Function called: ", xin, yin);
+        if(scrollToX <= xin && scrollToY <= yin){
+          //if you can scroll both, set both
+          window.scrollTo(scrollToX, scrollToY);
+          scrollToX += 25; //rate of scroll, lower number is slower
+          scrollToY += 25; //rate of scroll, lower number is slower
+        } else
+        if(scrollToX <= xin){
+          //if only one value is valid, scroll to that value
+          window.scrollTo(scrollToX, 0);
+          scrollToX += 25; //rate of scroll, lower number is slower
+        } else
+        if(scrollToY <= yin){
+          //if only one value is valid, scroll to that value
+          window.scrollTo(0, scrollToY);
+          scrollToY += 25; //rate of scroll, lower number is slower
+        } else {
+          clearInterval(myInterval);
+          console.log("Interval Cleared");
+        }
+    }
+}
+
+function whichIsGreater(a, b){
+  if(a > b){
+    return a;
+  } else {
+    return b;
+  }
+}
+
+function whichIsLess(a, b){
+  if(a > b){
+    return b;
+  } else {
+    return a;
+  }
+}
+
+function didItIncrease(a, b){
+  if(a < b){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+//smoothScroll(1000, 1000); //function(x-axis, y-axis)
+var x = didItIncrease(10, 12);
+console.log("Did it increase ", x);
+
+</script>
+
+</html>

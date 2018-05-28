@@ -13,12 +13,18 @@ const CENTER_SPOT = [Math.ceil(WINDOWS_ACROSS/2), Math.ceil(WINDOWS_VERTICAL/2)]
       //If there are 3 windows, center spot is 2 (1 on each side)
       //If there are 5 windows, center spot is 3 (2 on each side)
       //Side spots and then added or subtracted from this number
+
+//this tracks updated state - where it is going
 var newSpotX = CENTER_SPOT[0];
 var newSpotY = CENTER_SPOT[1];
+
+//setWindowScroll() needs a current state and compare against the updated state
+var currentSpotX = newSpotX;
+var currentSpotY = newSpotY;
+
+
 console.log("CENTER-X: ", newSpotX);
 console.log("Center-Y: ", newSpotY);
-
-
 
 const WINDOW_WIDTH = window.innerWidth
 || document.documentElement.clientWidth
@@ -29,6 +35,7 @@ const WINDOW_HEIGHT = window.innerHeight
 || document.body.clientHeight;
 
 var x = document.getElementById("demo");
+
 
 //function sets inner window size
 function setWindowSize(windowIn){
@@ -103,43 +110,138 @@ function setWindowPosition(windowIn, xAxis, yAxis){
   }
 }
 
-//set the position of the scroll - center on window spots
-function setWindowScroll(windowSpotX, windowSpotY){
-    let pixelsFromLeft = (WINDOW_WIDTH * windowSpotX) - WINDOW_WIDTH;
-    let pixelsFromTop = (WINDOW_HEIGHT * windowSpotY) - WINDOW_HEIGHT;
+//smooth scroll functions
+function scrollUp(yin){
 
-    // let pixelsFromLeft = (WINDOW_WIDTH * CENTER_SPOT[0]) - WINDOW_WIDTH;
-    if(windowSpotX <= WINDOWS_ACROSS && windowSpotX > 0){
-      window.scrollTo(pixelsFromLeft, pixelsFromTop);
-      console.log("SUCCESS - X", pixelsFromLeft);
-    } else {
-      console.log("FAILED");
-    }
+  let desiredPixelLocationY = (WINDOW_HEIGHT * yin) - WINDOW_HEIGHT;
+  let currentPixelLocationY = (WINDOW_HEIGHT * currentSpotY) - WINDOW_HEIGHT;
+  let currentPixelLocationX = (WINDOW_WIDTH * currentSpotX) - WINDOW_WIDTH;
 
-    if(windowSpotY <= WINDOWS_VERTICAL && windowSpotY > 0){
-      window.scrollTo(pixelsFromLeft, pixelsFromTop);
-      console.log("SUCCESS - Y", pixelsFromTop);
-    } else {
-      console.log("FAILED");
-    }
+
+  //check if there is a difference in the two positions
+  if(currentPixelLocationY != desiredPixelLocationY){
+    //start interval
+    var myInterval = setInterval(function(){scrollUpDoMath();}, 10);
+  } else {
+    console.log("ERROR: scrollUp() -- no difference");
+  }
+
+  function scrollUpDoMath(){
+      const SCROLL_SPEED = 55;
+
+      //must subtract pixel location until current = desired
+      if(desiredPixelLocationY <= currentPixelLocationY){
+          window.scrollTo(currentPixelLocationX, currentPixelLocationY);
+          currentPixelLocationY -= SCROLL_SPEED;
+      } else {
+        //final scrollTo (intervals of 25 don't guraentee a complete scroll
+        //clear interval and update current location
+        window.scrollTo(currentPixelLocationX, desiredPixelLocationY);
+        clearInterval(myInterval);
+        currentSpotY = newSpotY;
+      }
+  }
 }
 
-//set the position of the scroll - center on window spots
-// function setWindowScrollY(windowSpot){
-//     let pixelsFromTop = (WINDOW_HEIGHT * windowSpot) - WINDOW_HEIGHT;
-//     console.log("Window Width: " + WINDOW_HEIGHT + " xin: " + windowSpot);
-//
-//
-//     console.log("Scroll function called", pixelsFromTop);
-//
-//     // let pixelsFromLeft = (WINDOW_WIDTH * CENTER_SPOT[0]) - WINDOW_WIDTH;
-//     if(windowSpot <= WINDOWS_VERTICAL && windowSpot > 0){
-//       window.scrollTo(0, pixelsFromTop);
-//       console.log("SUCCESS");
-//     } else {
-//       console.log("FAILED");
-//     }
-// }
+function scrollDown(yin){
+
+  let desiredPixelLocationY = (WINDOW_HEIGHT * yin) - WINDOW_HEIGHT;
+  let currentPixelLocationY = (WINDOW_HEIGHT * currentSpotY) - WINDOW_HEIGHT;
+  let currentPixelLocationX = (WINDOW_WIDTH * currentSpotX) - WINDOW_WIDTH;
+
+
+  //check if there is a difference in the two positions
+  if(currentPixelLocationY != desiredPixelLocationY){
+    //start interval
+    var myInterval = setInterval(function(){scrollDownDoMath();}, 10);
+  } else {
+    console.log("ERROR: scrollDown() -- no difference");
+  }
+
+  function scrollDownDoMath(){
+      const SCROLL_SPEED = 55;
+
+      //must subtract pixel location until current = desired
+      if(currentPixelLocationY <= desiredPixelLocationY){
+          window.scrollTo(currentPixelLocationX, currentPixelLocationY);
+          currentPixelLocationY += SCROLL_SPEED;
+      } else {
+        //final scrollTo (intervals of 25 don't guraentee a complete scroll
+        //clear interval and update current location
+        window.scrollTo(currentPixelLocationX, desiredPixelLocationY);
+        clearInterval(myInterval);
+        currentSpotY = newSpotY;
+      }
+  }
+}
+
+function scrollLeft(xin){
+
+  let desiredPixelLocationX = (WINDOW_WIDTH * xin) - WINDOW_WIDTH;
+  let currentPixelLocationY = (WINDOW_HEIGHT * currentSpotY) - WINDOW_HEIGHT;
+  let currentPixelLocationX = (WINDOW_WIDTH * currentSpotX) - WINDOW_WIDTH;
+
+  //console.log("Cur:Des >> " + currentPixelLocationX + ":" + desiredPixelLocationX);
+
+  //check if there is a difference in the two positions
+  if(currentPixelLocationX != desiredPixelLocationX){
+    //start interval
+    var myInterval = setInterval(function(){scrollLeftDoMath();}, 10);
+  } else {
+    console.log("ERROR: scrollLeft() -- no difference");
+  }
+
+  function scrollLeftDoMath(){
+      const SCROLL_SPEED = 55;
+
+      //must subtract pixel location until current = desired
+      if(desiredPixelLocationX <= currentPixelLocationX){
+          window.scrollTo(currentPixelLocationX, currentPixelLocationY);
+          currentPixelLocationX -= SCROLL_SPEED;
+      } else {
+        //final scrollTo (intervals of 25 don't guraentee a complete scroll
+        //clear interval and update current location
+        window.scrollTo(desiredPixelLocationX, currentPixelLocationY);
+        clearInterval(myInterval);
+        currentSpotX = newSpotX;
+      }
+  }
+}
+
+function scrollRight(xin){
+
+  let desiredPixelLocationX = (WINDOW_WIDTH * xin) - WINDOW_WIDTH;
+  let currentPixelLocationY = (WINDOW_HEIGHT * currentSpotY) - WINDOW_HEIGHT;
+  let currentPixelLocationX = (WINDOW_WIDTH * currentSpotX) - WINDOW_WIDTH;
+
+  //console.log("Cur:Des >> " + currentPixelLocationX + ":" + desiredPixelLocationX);
+
+
+  //check if there is a difference in the two positions
+  if(currentPixelLocationX != desiredPixelLocationX){
+    //start interval
+    var myInterval = setInterval(function(){scrollRightDoMath();}, 10);
+  } else {
+    console.log("ERROR: scrollRight() -- no difference");
+  }
+
+  function scrollRightDoMath(){
+      const SCROLL_SPEED = 55;
+
+
+      //must ADD pixel location until current = desired
+      if(currentPixelLocationX <= desiredPixelLocationX){
+          window.scrollTo(currentPixelLocationX, currentPixelLocationY);
+          currentPixelLocationX += SCROLL_SPEED;
+      } else {
+        //final scrollTo (intervals of 25 don't guraentee a complete scroll
+        //clear interval and update current location
+        window.scrollTo(desiredPixelLocationX, currentPixelLocationY);
+        clearInterval(myInterval);
+        currentSpotX = newSpotX;
+      }
+  }
+}
 
 //set the position of the scroll - center on window spots
 function callWindowScroll(e){
@@ -147,38 +249,43 @@ function callWindowScroll(e){
     if(e.keyCode == '38'){
       //Up Key Press
       if(newSpotY > 1 && newSpotX == CENTER_SPOT[0]){
-        console.log("UP - X: " + newSpotX + " Y: " + newSpotY);
+        console.log("Up Pressed");
         --newSpotY;
-        setWindowScroll(newSpotX, newSpotY);
-        console.log("UP - X: " + newSpotX + " Y: " + newSpotY);
+        scrollUp(newSpotY);
+        //setWindowScroll(newSpotX, newSpotY);
+
+        //console.log("UP - X: " + newSpotX + " Y: " + newSpotY);
       }
     }
     else if(e.keyCode == '40'){
       //Down Key Press
       if(newSpotY < WINDOWS_VERTICAL && newSpotX == CENTER_SPOT[0]){
-        console.log("DOWN - X: " + newSpotX + " Y: " + newSpotY);
+        console.log("Down Pressed");
         ++newSpotY;
-        setWindowScroll(newSpotX, newSpotY);
-        console.log("DOWN - X: " + newSpotX + " Y: " + newSpotY);
+        scrollDown(newSpotY);
+        //setWindowScroll(newSpotX, newSpotY);
+        //console.log("DOWN - X: " + newSpotX + " Y: " + newSpotY);
       }
     }
     else if(e.keyCode == '37'){
       //Left Key Press
       if(newSpotX > 1 && newSpotY == CENTER_SPOT[1]){
-        console.log("LEFT - X: " + newSpotX + " Y: " + newSpotY);
+        console.log("Left Pressed");
         --newSpotX;
-        setWindowScroll(newSpotX, newSpotY);
-        console.log("LEFT - X: " + newSpotX + " Y: " + newSpotY);
+        scrollLeft(newSpotX);
+        //setWindowScroll(newSpotX, newSpotY);
+        //console.log("LEFT - X: " + newSpotX + " Y: " + newSpotY);
       }
       //console.log("Left: ", newSpot);
     }
     else if(e.keyCode == '39'){
       //Right Key Press
       if(newSpotX < WINDOWS_ACROSS && newSpotY == CENTER_SPOT[1]){
-        console.log("Right - X: " + newSpotX + " Y: " + newSpotY);
+        console.log("Right Pressed");
         ++newSpotX;
-        setWindowScroll(newSpotX, newSpotY);
-        console.log("Right - X: " + newSpotX + " Y: " + newSpotY);
+        scrollRight(newSpotX);
+        //setWindowScroll(newSpotX, newSpotY);
+        //console.log("Right - X: " + newSpotX + " Y: " + newSpotY);
       }
       //console.log("Right: ", newSpot);
     }
@@ -188,12 +295,37 @@ function callWindowScroll(e){
     }
 }
 
+function whichIsGreater(a, b){
+  if(a > b){
+    return a;
+  } else {
+    return b;
+  }
+}
+
+function whichIsLess(a, b){
+  if(a > b){
+    return b;
+  } else {
+    return a;
+  }
+}
+
+function didItIncrease(a, b){
+  if(a < b){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
 //set body window size
 THEBODY.style.width = ((WINDOW_WIDTH) * WINDOWS_ACROSS) + "px";
 THEBODY.style.height = ((WINDOW_HEIGHT) * WINDOWS_VERTICAL) + "px";
-window.scrollTo(WINDOW_WIDTH, WINDOW_HEIGHT);
+window.scrollTo(WINDOW_WIDTH, WINDOW_HEIGHT); //this only works when there is a 3x3 grid
 
-//function calls
+//function calls -- eventually change this to a loop and array
 setWindowSize(LEFT_WINDOW);
 setWindowSize(CENTER_WINDOW);
 setWindowSize(RIGHT_WINDOW);
