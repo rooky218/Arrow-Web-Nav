@@ -18,6 +18,100 @@ h3 {
   text-align: center;
 }
 
+.arrow{
+  height: 50px;
+  width: auto;
+  position: fixed;
+  z-index: 1000;
+}
+
+.arrow-left {
+  color: red;
+  top: 45%;
+  left: 2%;
+}
+
+.arrow:hover {
+  height: 55px;
+  width: auto;
+  transition: width .3s;
+  transition: height .3s;
+}
+
+.arrow-top {
+  transform: rotate(90deg);
+  top: 2%;
+  left: 45%;
+}
+
+.arrow-right {
+  transform: rotate(180deg);
+  top: 45%;
+  left: 94%;
+}
+
+.arrow-bottom {
+  transform: rotate(-90deg);
+  top: 92%;
+  left: 45%;
+}
+
+#map{
+  width: 100px;
+  height: 70px;
+  background-color: #333333;
+  position: fixed;
+  top: 88%;
+  left: 2%;
+  border-radius: 10px;
+  z-index: 1000;
+  padding: 0;
+  margin: 0;
+  opacity: 0.6;
+}
+
+.dot {
+  /* background-color: white; */
+  width: 20px;
+  height: 15px;
+  border-radius: 3px;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  z-index: 1200;
+}
+
+.dot-1 {
+  background-color: #848484;
+  top: 11%;
+  left: 40%;
+}
+
+.dot-2 {
+  background-color: #ffffff;
+  top: 40%;
+  left: 40%;
+}
+
+.dot-3 {
+  background-color: #848484;
+  top: 40%;
+  left: 11%;
+}
+
+.dot-4 {
+  background-color: #848484;
+  top: 68%;
+  left: 40%;
+}
+
+.dot-5 {
+  background-color: #848484;
+  top: 40%;
+  left: 69%;
+}
+
 
 
 #center-window,
@@ -26,7 +120,7 @@ h3 {
 #bottom-window,
 #left-window {
   margin: 0;
-  padding: 25px;
+  padding: 100px 75px 25px 75px;
   box-sizing: border-box;
   position: absolute;
   top: 0px;

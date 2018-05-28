@@ -1,41 +1,32 @@
 const THEBODY = document.body;
+const MAP_ICON = document.getElementsByClassName("dot");
+const ARROW = document.getElementsByClassName("arrow");
 const LEFT_WINDOW = document.getElementById("left-window");
 const CENTER_WINDOW = document.getElementById("center-window");
 const RIGHT_WINDOW = document.getElementById("right-window");
 const TOP_WINDOW = document.getElementById("top-window");
 const BOTTOM_WINDOW = document.getElementById("bottom-window");
-// const SCROLL_BAR_WIDTH_CHROME = 0; //15px
+const WINDOW_WIDTH = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+const WINDOW_HEIGHT = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 const WINDOWS_ACROSS = 3;
 const WINDOWS_VERTICAL = 3;
 const CENTER_SPOT = [Math.ceil(WINDOWS_ACROSS/2), Math.ceil(WINDOWS_VERTICAL/2)];
       //CENTER_SPOT[xAxis, yAxis]
-      //return the window location for center window.
-      //If there are 3 windows, center spot is 2 (1 on each side)
-      //If there are 5 windows, center spot is 3 (2 on each side)
-      //Side spots and then added or subtracted from this number
-
 //this tracks updated state - where it is going
 var newSpotX = CENTER_SPOT[0];
 var newSpotY = CENTER_SPOT[1];
+var desiredMapDot = document.getElementsByClassName(returnDesiredWindow())[0];
 
 //setWindowScroll() needs a current state and compare against the updated state
 var currentSpotX = newSpotX;
 var currentSpotY = newSpotY;
+var currentMapDot = document.getElementsByClassName(returnCurrentWindow())[0];
 
-
-console.log("CENTER-X: ", newSpotX);
-console.log("Center-Y: ", newSpotY);
-
-const WINDOW_WIDTH = window.innerWidth
-|| document.documentElement.clientWidth
-|| document.body.clientWidth;
-
-const WINDOW_HEIGHT = window.innerHeight
-|| document.documentElement.clientHeight
-|| document.body.clientHeight;
 
 var x = document.getElementById("demo");
 
+//console.log("CENTER-X: ", newSpotX);
+//console.log("Center-Y: ", newSpotY);
 
 //function sets inner window size
 function setWindowSize(windowIn){
@@ -121,6 +112,7 @@ function scrollUp(yin){
   //check if there is a difference in the two positions
   if(currentPixelLocationY != desiredPixelLocationY){
     //start interval
+
     var myInterval = setInterval(function(){scrollUpDoMath();}, 10);
   } else {
     console.log("ERROR: scrollUp() -- no difference");
@@ -243,14 +235,111 @@ function scrollRight(xin){
   }
 }
 
-//set the position of the scroll - center on window spots
-function callWindowScroll(e){
+//mouse click on DOM triggers scroll functions
+function clickTriggerScrollArrows(value){
+
+  if(value == "up"){
+    console.log("UP Arrow Clicked");
+    //Up window on MAP clicked
+    if(newSpotY > 1 && newSpotX == CENTER_SPOT[0]){
+      --newSpotY;
+      updateDesiredMapDot();
+      setMapColor("des");
+      scrollUp(newSpotY);
+
+    }
+  } else
+
+  if(value == "down"){
+    console.log("Down Arrow Clicked");
+    if(newSpotY < WINDOWS_VERTICAL && newSpotX == CENTER_SPOT[0]){
+      ++newSpotY;
+      updateDesiredMapDot();
+      setMapColor("des");
+      scrollDown(newSpotY);
+    }
+  } else
+
+  if(value == "left"){
+    console.log("Left Arrow Clicked");
+    if(newSpotX > 1 && newSpotY == CENTER_SPOT[1]){
+      --newSpotX;
+      updateDesiredMapDot();
+      setMapColor("des");
+      scrollLeft(newSpotX);
+    }
+  } else
+
+  if(value == "right"){
+    console.log("Right Arrow Pressed");
+    if(newSpotX < WINDOWS_ACROSS && newSpotY == CENTER_SPOT[1]){
+      ++newSpotX;
+      updateDesiredMapDot();
+      setMapColor("des");
+      scrollRight(newSpotX);
+    }
+  }
+
+
+}
+
+//set white dot for current window on dot map
+function setMapColor(xin){
+  console.log("function called map color");
+  //Reset colors
+  MAP_ICON[0].style.backgroundColor = "#848484";
+  MAP_ICON[1].style.backgroundColor = "#848484";
+  MAP_ICON[2].style.backgroundColor = "#848484";
+  MAP_ICON[3].style.backgroundColor = "#848484";
+  MAP_ICON[4].style.backgroundColor = "#848484";
+
+  //set current color
+  //current.style.backgroundColor = "white";
+  if(xin == "des"){
+    desiredMapDot.style.backgroundColor = "white";
+  } else
+  if(xin == "cur") {
+    currentMapDot.style.backgroundColor = "white";
+  } else {
+    console.log("ERROR: setMapColor() needs correct parameter");
+  }
+
+}
+
+//set white dot for active window on dot map
+function setMapColorArrows(current){
+  //Reset colors
+  MAP_ICON[0].style.backgroundColor = "#848484";
+  MAP_ICON[1].style.backgroundColor = "#848484";
+  MAP_ICON[2].style.backgroundColor = "#848484";
+  MAP_ICON[3].style.backgroundColor = "#848484";
+  MAP_ICON[4].style.backgroundColor = "#848484";
+
+  //set current color
+  if(current == "up"){
+    MAP_ICON[0].style.backgroundColor = "white";
+  } else
+  if(current == "left"){
+    MAP_ICON[2].style.backgroundColor = "white";
+  } else
+  if(current == "down"){
+    MAP_ICON[3].style.backgroundColor = "white";
+  } else
+  if(current == "right"){
+    MAP_ICON[4].style.backgroundColor = "white";
+  }
+}
+
+//arrow keys trigger scroll functions
+function keyboardTriggerScroll(e){
 
     if(e.keyCode == '38'){
       //Up Key Press
       if(newSpotY > 1 && newSpotX == CENTER_SPOT[0]){
         console.log("Up Pressed");
         --newSpotY;
+        updateDesiredMapDot();
+        setMapColor("des");
         scrollUp(newSpotY);
         //setWindowScroll(newSpotX, newSpotY);
 
@@ -262,9 +351,9 @@ function callWindowScroll(e){
       if(newSpotY < WINDOWS_VERTICAL && newSpotX == CENTER_SPOT[0]){
         console.log("Down Pressed");
         ++newSpotY;
+        updateDesiredMapDot();
+        setMapColor("des");
         scrollDown(newSpotY);
-        //setWindowScroll(newSpotX, newSpotY);
-        //console.log("DOWN - X: " + newSpotX + " Y: " + newSpotY);
       }
     }
     else if(e.keyCode == '37'){
@@ -272,9 +361,9 @@ function callWindowScroll(e){
       if(newSpotX > 1 && newSpotY == CENTER_SPOT[1]){
         console.log("Left Pressed");
         --newSpotX;
+        updateDesiredMapDot();
+        setMapColor("des");
         scrollLeft(newSpotX);
-        //setWindowScroll(newSpotX, newSpotY);
-        //console.log("LEFT - X: " + newSpotX + " Y: " + newSpotY);
       }
       //console.log("Left: ", newSpot);
     }
@@ -283,9 +372,9 @@ function callWindowScroll(e){
       if(newSpotX < WINDOWS_ACROSS && newSpotY == CENTER_SPOT[1]){
         console.log("Right Pressed");
         ++newSpotX;
+        updateDesiredMapDot();
+        setMapColor("des");
         scrollRight(newSpotX);
-        //setWindowScroll(newSpotX, newSpotY);
-        //console.log("Right - X: " + newSpotX + " Y: " + newSpotY);
       }
       //console.log("Right: ", newSpot);
     }
@@ -293,6 +382,86 @@ function callWindowScroll(e){
     if(e.keyCode == '66'){
       console.log("Hello Ben");
     }
+}
+
+//returnes the dot on the map for current window
+function returnCurrentWindow(){
+
+  //Top Dot
+  if(currentSpotX == 2 && currentSpotY == 1){
+    return "dot-1";
+  } else
+  //Left Dot
+  if(currentSpotX == 1 && currentSpotY == 2){
+    return "dot-3";
+  } else
+  //Center Dot
+  if(currentSpotX == 2 && currentSpotY == 2){
+    return "dot-2";
+  } else
+  //Right Dot
+  if(currentSpotX == 3 && currentSpotY == 2){
+    return "dot-5";
+  } else
+  //Bottom Dot
+  if(currentSpotX == 2 && currentSpotY == 3){
+    return "dot-4";
+  }
+
+}
+
+//returnes the dot on the map for desired window
+function returnDesiredWindow(){
+
+  //Top Dot
+  if(newSpotX == 2 && newSpotY == 1){
+    return "dot-1";
+  } else
+  //Left Dot
+  if(newSpotX == 1 && newSpotY == 2){
+    return "dot-3";
+  } else
+  //Center Dot
+  if(newSpotX == 2 && newSpotY == 2){
+    return "dot-2";
+  } else
+  //Right Dot
+  if(newSpotX == 3 && newSpotY == 2){
+    return "dot-5";
+  } else
+  //Bottom Dot
+  if(newSpotX == 2 && newSpotY == 3){
+    return "dot-4";
+  }
+
+}
+
+function updateCurrentMapDot(){
+  currentMapDot = document.getElementsByClassName(returnCurrentWindow())[0];
+}
+
+function updateDesiredMapDot(){
+  desiredMapDot = document.getElementsByClassName(returnDesiredWindow())[0];
+}
+
+function jumpToWindow(xin, yin){
+  //calculate pixel location
+  let desiredPixelLocationX = (WINDOW_WIDTH * xin) - WINDOW_WIDTH;
+  let desiredPixelLocationY = (WINDOW_HEIGHT * yin) - WINDOW_HEIGHT;
+
+  //update current location
+  newSpotX = xin;
+  newSpotY = yin;
+  currentSpotX = xin;
+  currentSpotY = yin;
+
+  //update map location
+  updateCurrentMapDot();
+  updateDesiredMapDot();
+  setMapColor("cur");
+
+  //jump to new location
+  window.scrollTo(desiredPixelLocationX, desiredPixelLocationY);
 }
 
 //set body window size
@@ -313,10 +482,23 @@ setWindowPosition('left-window', -1, 0);
 setWindowPosition('top-window', 0, -1);
 setWindowPosition('bottom-window', 0, 1);
 
-
 //eventListeners
-document.onkeydown = callWindowScroll;
+document.onkeydown = keyboardTriggerScroll;
+MAP_ICON[0].addEventListener('click', function(){jumpToWindow(2, 1)}, false); //top
+MAP_ICON[1].addEventListener('click', function(){jumpToWindow(2, 2)}, false); //center
+MAP_ICON[2].addEventListener('click', function(){jumpToWindow(1, 2)}, false); //left
+MAP_ICON[3].addEventListener('click', function(){jumpToWindow(2, 3)}, false); //bottom
+MAP_ICON[4].addEventListener('click', function(){jumpToWindow(3, 2)}, false); //right
+
+ARROW[0].addEventListener('click', function(){clickTriggerScrollArrows("left")}, false);
+ARROW[1].addEventListener('click', function(){clickTriggerScrollArrows("right")}, false);
+ARROW[2].addEventListener('click', function(){clickTriggerScrollArrows("up")}, false);
+ARROW[3].addEventListener('click', function(){clickTriggerScrollArrows("down")}, false);
+//console.log("MAP", MAP_ICON[0]);
+
+//CURRENT_MAP_WINDOW.style.backgroundColor = "hotpink";
+//console.log("map stuff: ", CURRENT_MAP_WINDOW[0]);
 
 //output window dimensions for reference and testing only
 x.innerHTML = "Browser inner window width: " + WINDOW_WIDTH + ", height: " + WINDOW_HEIGHT + ".";
-console.log("Total Width: ", THEBODY.style.width);
+//console.log("Total Width: ", THEBODY.style.width);
