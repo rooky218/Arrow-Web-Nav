@@ -295,31 +295,6 @@ function callWindowScroll(e){
     }
 }
 
-function whichIsGreater(a, b){
-  if(a > b){
-    return a;
-  } else {
-    return b;
-  }
-}
-
-function whichIsLess(a, b){
-  if(a > b){
-    return b;
-  } else {
-    return a;
-  }
-}
-
-function didItIncrease(a, b){
-  if(a < b){
-    return true;
-  } else {
-    return false;
-  }
-}
-
-
 //set body window size
 THEBODY.style.width = ((WINDOW_WIDTH) * WINDOWS_ACROSS) + "px";
 THEBODY.style.height = ((WINDOW_HEIGHT) * WINDOWS_VERTICAL) + "px";
