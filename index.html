@@ -7,9 +7,30 @@
     <title>Arrow Key Navigation</title>
     <script src="script.js" async></script>
     <link rel="stylesheet" href="style.css">
+
+    <!-- font awesome icon pack -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+    integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+    crossorigin="anonymous">
+
+
 </head>
 
 <body>
+
+  <!-- icons used legally from https://fontawesome.com/icons/chevron-left?style=solid -->
+  <i class="fas fa-chevron-left arrow arrow-left"></i>
+  <i class="fas fa-chevron-right arrow arrow-right"></i>
+  <i class="fas fa-chevron-up arrow arrow-up"></i>
+  <i class="fas fa-chevron-down arrow arrow-down"></i>
+
+  <div id="map">
+    <div class="dot dot-1"></div>
+    <div class="dot dot-2"></div>
+    <div class="dot dot-3"></div>
+    <div class="dot dot-4"></div>
+    <div class="dot dot-5"></div>
+  </div>
 
   <div id="left-window">
     <h1>Left Window</h1>
@@ -20,17 +41,6 @@
 
     <h1>Center Window</h1>
     <h3 id="demo"></h3>
-    <img class="arrow arrow-left" src="images/arrow.png" />
-    <img class="arrow arrow-right" src="images/arrow.png" />
-    <img class="arrow arrow-top" src="images/arrow.png" />
-    <img class="arrow arrow-bottom" src="images/arrow.png" />
-    <div id="map">
-      <div class="dot dot-1"></div>
-      <div class="dot dot-2"></div>
-      <div class="dot dot-3"></div>
-      <div class="dot dot-4"></div>
-      <div class="dot dot-5"></div>
-    </div>
     <p>Press the different Arrow keys on your keyboard to navigate the page. You must come back to Center Window to go a differnt direction</p>
   </div>
 
@@ -50,5 +60,4 @@
   </div>
 
 </body>
-
 </html>

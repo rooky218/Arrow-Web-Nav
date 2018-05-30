@@ -22,7 +22,6 @@ var currentSpotX = newSpotX;
 var currentSpotY = newSpotY;
 var currentMapDot = document.getElementsByClassName(returnCurrentWindow())[0];
 
-
 var x = document.getElementById("demo");
 
 //console.log("CENTER-X: ", newSpotX);
@@ -306,30 +305,6 @@ function setMapColor(xin){
 
 }
 
-//set white dot for active window on dot map
-function setMapColorArrows(current){
-  //Reset colors
-  MAP_ICON[0].style.backgroundColor = "#848484";
-  MAP_ICON[1].style.backgroundColor = "#848484";
-  MAP_ICON[2].style.backgroundColor = "#848484";
-  MAP_ICON[3].style.backgroundColor = "#848484";
-  MAP_ICON[4].style.backgroundColor = "#848484";
-
-  //set current color
-  if(current == "up"){
-    MAP_ICON[0].style.backgroundColor = "white";
-  } else
-  if(current == "left"){
-    MAP_ICON[2].style.backgroundColor = "white";
-  } else
-  if(current == "down"){
-    MAP_ICON[3].style.backgroundColor = "white";
-  } else
-  if(current == "right"){
-    MAP_ICON[4].style.backgroundColor = "white";
-  }
-}
-
 //arrow keys trigger scroll functions
 function keyboardTriggerScroll(e){
 
@@ -340,6 +315,7 @@ function keyboardTriggerScroll(e){
         --newSpotY;
         updateDesiredMapDot();
         setMapColor("des");
+        toggleHoverState("up");
         scrollUp(newSpotY);
         //setWindowScroll(newSpotX, newSpotY);
 
@@ -353,6 +329,7 @@ function keyboardTriggerScroll(e){
         ++newSpotY;
         updateDesiredMapDot();
         setMapColor("des");
+        toggleHoverState("down");
         scrollDown(newSpotY);
       }
     }
@@ -363,6 +340,7 @@ function keyboardTriggerScroll(e){
         --newSpotX;
         updateDesiredMapDot();
         setMapColor("des");
+        toggleHoverState("left");
         scrollLeft(newSpotX);
       }
       //console.log("Left: ", newSpot);
@@ -374,6 +352,7 @@ function keyboardTriggerScroll(e){
         ++newSpotX;
         updateDesiredMapDot();
         setMapColor("des");
+        toggleHoverState("right");
         scrollRight(newSpotX);
       }
       //console.log("Right: ", newSpot);
@@ -444,6 +423,7 @@ function updateDesiredMapDot(){
   desiredMapDot = document.getElementsByClassName(returnDesiredWindow())[0];
 }
 
+//used with Map Dot to navigate. Click a dot to teleport - no smooth scroll functionality
 function jumpToWindow(xin, yin){
   //calculate pixel location
   let desiredPixelLocationX = (WINDOW_WIDTH * xin) - WINDOW_WIDTH;
@@ -462,6 +442,61 @@ function jumpToWindow(xin, yin){
 
   //jump to new location
   window.scrollTo(desiredPixelLocationX, desiredPixelLocationY);
+}
+
+//this triggers the CSS transition animation when arrow key pressed 
+//simiulates hover state, makes arrow jump
+function toggleHoverState(xin){
+  if(xin == "left"){
+    console.log("left called");
+    let currentClasses = ARROW[0].className;
+    ARROW[0].className = currentClasses + " arrow-left-JS-hover";
+    setTimeout(function(){toggleHoverState("r-left");}, 200);
+  } else
+  if(xin == "right"){
+    console.log("right called");
+    let currentClasses = ARROW[1].className;
+    ARROW[1].className = currentClasses + " arrow-right-JS-hover";
+    setTimeout(function(){toggleHoverState("r-right");}, 200);
+  } else
+  if(xin == "up"){
+    console.log("up called");
+    let currentClasses = ARROW[2].className;
+    ARROW[2].className = currentClasses + " arrow-up-JS-hover";
+    setTimeout(function(){toggleHoverState("r-up");}, 200);
+  } else
+  if(xin == "down"){
+    console.log("down called");
+    let currentClasses = ARROW[3].className;
+    ARROW[3].className = currentClasses + " arrow-down-JS-hover";
+    setTimeout(function(){toggleHoverState("r-down");}, 200);
+  } else
+
+  if(xin == "r-left"){
+    console.log("recursion called");
+    let currentClasses = ARROW[0].className;
+    currentClasses = currentClasses.replace(" arrow-left-JS-hover", " ")
+    ARROW[0].className = currentClasses;
+  } else
+  if(xin == "r-right"){
+    console.log("recursion called");
+    let currentClasses = ARROW[1].className;
+    currentClasses = currentClasses.replace(" arrow-right-JS-hover", " ")
+    ARROW[1].className = currentClasses;
+  } else
+  if(xin == "r-up"){
+    console.log("recursion called");
+    let currentClasses = ARROW[2].className;
+    currentClasses = currentClasses.replace(" arrow-up-JS-hover", " ")
+    ARROW[2].className = currentClasses;
+  } else
+  if(xin == "r-down"){
+    console.log("recursion called");
+    let currentClasses = ARROW[3].className;
+    currentClasses = currentClasses.replace(" arrow-down-JS-hover", " ")
+    ARROW[3].className = currentClasses;
+  }
+
 }
 
 //set body window size
