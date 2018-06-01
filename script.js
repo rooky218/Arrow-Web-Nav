@@ -242,6 +242,7 @@ function clickTriggerScrollArrows(value){
     //Up window on MAP clicked
     if(newSpotY > 1 && newSpotX == CENTER_SPOT[0]){
       --newSpotY;
+      updateArrowColor()
       updateDesiredMapDot();
       setMapColor("des");
       scrollUp(newSpotY);
@@ -253,6 +254,7 @@ function clickTriggerScrollArrows(value){
     console.log("Down Arrow Clicked");
     if(newSpotY < WINDOWS_VERTICAL && newSpotX == CENTER_SPOT[0]){
       ++newSpotY;
+      updateArrowColor()
       updateDesiredMapDot();
       setMapColor("des");
       scrollDown(newSpotY);
@@ -263,6 +265,7 @@ function clickTriggerScrollArrows(value){
     console.log("Left Arrow Clicked");
     if(newSpotX > 1 && newSpotY == CENTER_SPOT[1]){
       --newSpotX;
+      updateArrowColor()
       updateDesiredMapDot();
       setMapColor("des");
       scrollLeft(newSpotX);
@@ -273,6 +276,7 @@ function clickTriggerScrollArrows(value){
     console.log("Right Arrow Pressed");
     if(newSpotX < WINDOWS_ACROSS && newSpotY == CENTER_SPOT[1]){
       ++newSpotX;
+      updateArrowColor()
       updateDesiredMapDot();
       setMapColor("des");
       scrollRight(newSpotX);
@@ -284,7 +288,7 @@ function clickTriggerScrollArrows(value){
 
 //set white dot for current window on dot map
 function setMapColor(xin){
-  console.log("function called map color");
+  //console.log("function called map color");
   //Reset colors
   MAP_ICON[0].style.backgroundColor = "#848484";
   MAP_ICON[1].style.backgroundColor = "#848484";
@@ -317,6 +321,7 @@ function keyboardTriggerScroll(e){
         setMapColor("des");
         toggleHoverState("up");
         scrollUp(newSpotY);
+        updateArrowColor();
         //setWindowScroll(newSpotX, newSpotY);
 
         //console.log("UP - X: " + newSpotX + " Y: " + newSpotY);
@@ -330,6 +335,7 @@ function keyboardTriggerScroll(e){
         updateDesiredMapDot();
         setMapColor("des");
         toggleHoverState("down");
+        updateArrowColor();
         scrollDown(newSpotY);
       }
     }
@@ -341,6 +347,7 @@ function keyboardTriggerScroll(e){
         updateDesiredMapDot();
         setMapColor("des");
         toggleHoverState("left");
+        updateArrowColor();
         scrollLeft(newSpotX);
       }
       //console.log("Left: ", newSpot);
@@ -353,6 +360,7 @@ function keyboardTriggerScroll(e){
         updateDesiredMapDot();
         setMapColor("des");
         toggleHoverState("right");
+        updateArrowColor();
         scrollRight(newSpotX);
       }
       //console.log("Right: ", newSpot);
@@ -423,6 +431,75 @@ function updateDesiredMapDot(){
   desiredMapDot = document.getElementsByClassName(returnDesiredWindow())[0];
 }
 
+//updates the color arrows based on which window you are in
+function updateArrowColor(){
+  //let currentWindow = document.getElementsByClassName(returnCurrentWindow())[0];
+  let currentId = returnDesiredWindow();
+  console.log("updateArrowColor Called ", currentId);
+
+  //top window
+  if(currentId == "dot-1"){
+    console.log("Top Dot: ", currentId);
+    //left
+    document.getElementsByClassName("arrow")[0].style.color = "#e0d221";
+    //right
+    document.getElementsByClassName("arrow")[1].style.color = "#e0d221";
+    //top
+    document.getElementsByClassName("arrow")[2].style.color = "#e0d221";
+    //bottom
+    document.getElementsByClassName("arrow")[3].style.color = "#4c3375";
+  } else
+  //center window
+  if(currentId == "dot-2"){
+    console.log("if confirmed");
+    //left
+    document.getElementsByClassName("arrow")[0].style.color = "#a39a16";
+    //right
+    document.getElementsByClassName("arrow")[1].style.color = "#a39a16";
+    //top
+    document.getElementsByClassName("arrow")[2].style.color = "#a39a16";
+    //bottom
+    document.getElementsByClassName("arrow")[3].style.color = "#a39a16";
+  } else
+  //Left window
+  if(currentId == "dot-3"){
+    console.log("if confirmed");
+    //left
+    document.getElementsByClassName("arrow")[0].style.color = "#d1fdc7";
+    //right
+    document.getElementsByClassName("arrow")[1].style.color = "#026609";
+    //top
+    document.getElementsByClassName("arrow")[2].style.color = "#d1fdc7";
+    //bottom
+    document.getElementsByClassName("arrow")[3].style.color = "#d1fdc7";
+  } else
+  //Bottom Window
+  if(currentId == "dot-4"){
+    console.log("if confirmed");
+    //left
+    document.getElementsByClassName("arrow")[0].style.color = "#2c2d9b";
+    //right
+    document.getElementsByClassName("arrow")[1].style.color = "#2c2d9b";
+    //top
+    document.getElementsByClassName("arrow")[2].style.color = "#e4ee24";
+    //bottom
+    document.getElementsByClassName("arrow")[3].style.color = "#2c2d9b";
+  } else
+  //Right Window
+  if(currentId == "dot-5"){
+    console.log("if confirmed");
+    //left
+    document.getElementsByClassName("arrow")[0].style.color = "#6ff4e9";
+    //right
+    document.getElementsByClassName("arrow")[1].style.color = "#b92f2e";
+    //top
+    document.getElementsByClassName("arrow")[2].style.color = "#b92f2e";
+    //bottom
+    document.getElementsByClassName("arrow")[3].style.color = "#b92f2e";
+  }
+
+}
+
 //used with Map Dot to navigate. Click a dot to teleport - no smooth scroll functionality
 function jumpToWindow(xin, yin){
   //calculate pixel location
@@ -437,6 +514,7 @@ function jumpToWindow(xin, yin){
 
   //update map location
   updateCurrentMapDot();
+  updateArrowColor();
   updateDesiredMapDot();
   setMapColor("cur");
 
@@ -444,7 +522,7 @@ function jumpToWindow(xin, yin){
   window.scrollTo(desiredPixelLocationX, desiredPixelLocationY);
 }
 
-//this triggers the CSS transition animation when arrow key pressed 
+//this triggers the CSS transition animation when arrow key pressed
 //simiulates hover state, makes arrow jump
 function toggleHoverState(xin){
   if(xin == "left"){
@@ -510,6 +588,8 @@ setWindowSize(CENTER_WINDOW);
 setWindowSize(RIGHT_WINDOW);
 setWindowSize(TOP_WINDOW);
 setWindowSize(BOTTOM_WINDOW);
+
+updateArrowColor();
 
 setWindowPosition('center-window', 0, 0);
 setWindowPosition('right-window', 1, 0);
